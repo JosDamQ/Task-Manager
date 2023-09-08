@@ -7,6 +7,7 @@ const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3200;
 const userRoutes = require('../src/users/user.routes')
+const typeTask = require('../src/typeTask/typeTask.routes')
 
 //Coonfigurar server HTTP
 app.use(express.urlencoded({extended:false}));
@@ -17,6 +18,7 @@ app.use(morgan('dev'));
 
 //Rutas
 app.use('/user', userRoutes);
+app.use('/typeTask', typeTask)
 
 //Levantar el server
 exports.initServer = () =>{
