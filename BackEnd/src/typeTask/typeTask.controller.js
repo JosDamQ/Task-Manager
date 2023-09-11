@@ -60,18 +60,35 @@ exports.getTypeTask = async (req, res) => {
     }
 }
 
-/*exports.update = async (req, res) => {
+exports.changeName = async(req, res) => {
     try{
         let data = req.body;
         let userId = req.user.sub;
         let typeTaskId = req.params.id
-        let existTypeTask = await TypeTask.findOne({name: data.name, user: userId});
-        if()
+        let existType = await TypeTask.findOne({name: { $regex: new RegExp(`^${data.name}$`, 'i') }, user: userId});
+        if(existType){
+            //Ir a buscar a la BD si id que viene en ruta = id del nombre que está mandando
+            if(existType._id != typeTaskId) return res.status(400).send({message: 'TypeTask already exists'});
+            let update = await TypeTask.findOneAndUpdate(
+                {_id: typeTaskId},
+                data,
+                {new: true}
+            );
+            if(!update) return res.status(404).send({message: 'TypeTask not found and not updated'});
+            return res.send({update})
+        }
+        let update = await TypeTask.findOneAndUpdate(
+            {_id: typeTaskId},
+            data,
+            {new: true}
+        );
+        if(!update) return res.status(404).send({message: 'TypeTask not found and not updated'});
+        return res.send({update})
     }catch(err){
-        console.error(err)
-        return res.status(500).send({message: 'Error updating'});
+        console.error(err);
+        return res.status(500).send({message: 'Error changing the name'})
     }
-}*/
+}
 
 exports.delete = async (req, res) => {
     try{
