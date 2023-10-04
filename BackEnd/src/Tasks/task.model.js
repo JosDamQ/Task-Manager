@@ -13,6 +13,16 @@ const task = mongoose.Schema({
     },
     priority: {
         type: Number,
+        required: true,
+        
+    },
+    initDate: {
+        type: Date,
+        required: true,
+        default: Date.now
+    },
+    endDate: {
+        type: Date,
         required: true
     },
     typeTask: {
